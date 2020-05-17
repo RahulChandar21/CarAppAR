@@ -29,21 +29,26 @@ using System.IO;
 using UnityEngine;
 using System.Collections.Generic;
 
-public static class SavWav {
+public static class SavWav
+{
 
 	const int HEADER_SIZE = 44;
 
-	public static bool Save(string filename, AudioClip clip) {
-		if (!filename.ToLower().EndsWith(".wav")) {
+	public static bool Save(string filename, AudioClip clip)
+	{
+		if (!filename.ToLower().EndsWith(".wav"))
+		{
 			filename += ".wav";
 		}
 		//CUSTOM 10
+		//"Application.persistentDataPath" - Inbuilt function within Unity, that stores the data in right location for mobile.
 		var filepath = Application.persistentDataPath + "/" + filename;
 		Debug.Log(filepath);
 
 		// Make sure directory exists if user is saving to sub dir.
 		//Directory.CreateDirectory(Path.GetDirectoryName(filepath));
- 		using (var fileStream = CreateEmpty(filepath)) {
+ 		using (var fileStream = CreateEmpty(filepath))
+		{
 			ConvertAndWrite(fileStream, clip);
 			WriteHeader(fileStream, clip);
 		}
@@ -51,7 +56,8 @@ public static class SavWav {
 		return true; // TODO: return false if there's a failure saving the file
 	}
 
-	public static AudioClip TrimSilence(AudioClip clip, float min) {
+	public static AudioClip TrimSilence(AudioClip clip, float min)
+	{
 		var samples = new float[clip.samples];
 
 		clip.GetData(samples, 0);
@@ -59,23 +65,29 @@ public static class SavWav {
 		return TrimSilence(new List<float>(samples), min, clip.channels, clip.frequency);
 	}
 
-	public static AudioClip TrimSilence(List<float> samples, float min, int channels, int hz) {
+	public static AudioClip TrimSilence(List<float> samples, float min, int channels, int hz)
+	{
 		return TrimSilence(samples, min, channels, hz, false, false);
 	}
 
-	public static AudioClip TrimSilence(List<float> samples, float min, int channels, int hz, bool _3D, bool stream) {
+	public static AudioClip TrimSilence(List<float> samples, float min, int channels, int hz, bool _3D, bool stream)
+	{
 		int i;
 
-		for (i=0; i<samples.Count; i++) {
-			if (Mathf.Abs(samples[i]) > min) {
+		for (i=0; i<samples.Count; i++)
+		{
+			if (Mathf.Abs(samples[i]) > min)
+			{
 				break;
 			}
 		}
 
 		samples.RemoveRange(0, i);
 
-		for (i=samples.Count - 1; i>0; i--) {
-			if (Mathf.Abs(samples[i]) > min) {
+		for (i=samples.Count - 1; i>0; i--)
+		{
+			if (Mathf.Abs(samples[i]) > min)
+			{
 				break;
 			}
 		}
@@ -89,7 +101,8 @@ public static class SavWav {
 		return clip;
 	}
 
-	static FileStream CreateEmpty(string filepath) {
+	static FileStream CreateEmpty(string filepath)
+	{
 		var fileStream = new FileStream(filepath, FileMode.Create);
 		byte emptyByte = new byte();
 
@@ -101,7 +114,8 @@ public static class SavWav {
 		return fileStream;
 	}
 
-	static void ConvertAndWrite(FileStream fileStream, AudioClip clip) {
+	static void ConvertAndWrite(FileStream fileStream, AudioClip clip)
+	{
 
 		var samples = new float[clip.samples];
 
@@ -116,7 +130,8 @@ public static class SavWav {
 
 		int rescaleFactor = 32767; //to convert float to Int16
 
-		for (int i = 0; i<samples.Length; i++) {
+		for (int i = 0; i<samples.Length; i++)
+		{
 			intData[i] = (short) (samples[i] * rescaleFactor);
 			Byte[] byteArr = new Byte[2];
 			byteArr = BitConverter.GetBytes(intData[i]);
@@ -126,7 +141,8 @@ public static class SavWav {
 		fileStream.Write(bytesData, 0, bytesData.Length);
 	}
 
-	static void WriteHeader(FileStream fileStream, AudioClip clip) {
+	static void WriteHeader(FileStream fileStream, AudioClip clip)
+	{
 
 		var hz = clip.frequency;
 		var channels = clip.channels;

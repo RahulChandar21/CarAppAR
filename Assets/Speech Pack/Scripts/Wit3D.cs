@@ -28,11 +28,11 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
+using System.IO; //Saving and reading of the audio file.
 using System.Linq;
-using System.Net;
+using System.Net; //To send the audio file.
 using System.Text;
-using UnityEngine.Networking;
+using UnityEngine.Networking; //To send the audio file.
 using UnityEngine.UI;
 using UnityEngine.Video;
 
@@ -40,12 +40,11 @@ using UnityEngine.Video;
 //_Handle is just written separety instead of at the bottom.
 public partial class Wit3D : MonoBehaviour
 {
-
 	// Class Variables
 
 	// Audio variables
-	public AudioClip commandClip;
-	int samplerate;
+	public AudioClip commandClip; //To overwrite with recorded audio.
+	int samplerate; //Sample rate suuitable for wit.ai
 
 	// API access parameters. Variables are private by default if type not specified.
 	string url = "https://api.wit.ai/speech?v=20200404";
@@ -154,6 +153,7 @@ public partial class Wit3D : MonoBehaviour
 		string file = Application.persistentDataPath + "/sample.wav";
  		string API_KEY = token;
 
+		//To rar file to bytes.
 		FileStream filestream = new FileStream (file, FileMode.Open, FileAccess.Read);
 		BinaryReader filereader = new BinaryReader (filestream);
 		byte[] postData = filereader.ReadBytes ((Int32)filestream.Length);
