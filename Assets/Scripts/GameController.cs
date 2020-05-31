@@ -9,7 +9,6 @@ public class GameController : MonoBehaviour
     //Static variable created to store the currently chosen car and pass it on to different scene.
     //Static variable value remains stable, does not vary relative to instances..
 
-
     // Start is called before the first frame update
     void Start()
     {

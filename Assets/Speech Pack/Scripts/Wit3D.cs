@@ -37,23 +37,22 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 
 //Partial class means Wit3D and _Handle scripts are part of the same class.
-//_Handle is just written separety instead of at the bottom.
+//_Handle script is just written separately instead of at the bottom.
 public partial class Wit3D : MonoBehaviour
 {
 	// Class Variables
 
 	// Audio variables
 	public AudioClip commandClip; //To overwrite with recorded audio.
-	int samplerate; //Sample rate suuitable for wit.ai
+	private int _samplerate; //Sample rate suitable for wit.ai
 
-	// API access parameters. Variables are private by default if type not specified.
-	string url = "https://api.wit.ai/speech?v=20200404";
-	string token = "7ZXC5ILLNZMERD46MWYRARQAOZ5TLCPI";
+	// API access parameters.
+	private string url = "https://api.wit.ai/speech?v=20200404";
+	private string token = "7ZXC5ILLNZMERD46MWYRARQAOZ5TLCPI";
 
-	//Custom 1
- 	// GameObject to use as a default spawn point
- 	private bool isRecording = false;
-	private bool pressedButton = false;
+	// GameObject to use as a default spawn point
+ 	private bool _isRecording = false;
+	private bool _buttonPressed = false;
 	public Text myResultBox;
 	//public VideoPlayer vidScreen;
 	//public GameObject vidCanvas;
@@ -61,110 +60,107 @@ public partial class Wit3D : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-
 		// If you are a Windows user and receiving a Tlserror
 		// See: https://github.com/afauch/wit3d/issues/2
 		// Uncomment the line below to bypass SSL
 		// System.Net.ServicePointManager.ServerCertificateValidationCallback = (a, b, c, d) => { return true; };
 
 		// set samplerate to 16000 for wit.ai
-		samplerate = 16000;
+		_samplerate = 16000;
+
 		//vidScreen.GetComponent<VideoPlayer> ();
 	}
 
-	//Custom 2
-	public void startStopRecord()
-    {
-		if (isRecording == true)
-        {
-			pressedButton = true;
-			isRecording = false;
- 		}
-        else if (isRecording == false)
-        {
-			isRecording = true;
-			pressedButton = true;
-		}
+	// Update is called once per frame
+	void Update()
+	{
+		if (_buttonPressed == true)
+		{
+			if (_isRecording == true)
+			{
+				myResultBox.text = "Listening... Press RECORD button again to stop";
 
+				//Start recording (rewriting default recording).
+				//If we pass a null or empty string for the device name then the default microphone will be used.
+				commandClip = Microphone.Start(null, false, 5, _samplerate);
+			}
+
+			else if (_isRecording == false)
+			{
+				myResultBox.text = null;
+				myResultBox.text = "Saving Voice Request";
+
+				// Save the audio file
+				Microphone.End(null);
+
+				//Ensures microphone has indeed recorded the voice.
+				if (SavWav.Save("sample", commandClip) == true)
+				{
+					myResultBox.text = "Sending audio to AI...";
+				}
+				else
+				{
+					myResultBox.text = "FAILED";
+				}
+
+				// At this point, we can delete the existing audio clip.
+				commandClip = null;
+
+				//Start a coroutine called "WaitForRequest" with that WWW variable passed in as an argument
+				StartCoroutine(SendRequestToWitAi());
+			}
+
+			_buttonPressed = false;
+		}
 	}
 
+	//Activates upon user pressing record button.
+	public void startStopRecord()
+    {
+		_buttonPressed = true;
 
-	//Custom 3
+		//Activates upon user pressing record for the 2nd time.
+		if (_isRecording == true)
+		{
+			_isRecording = false;
+		}
+
+		//_isRecording == false by default.
+		else if (_isRecording == false)
+		{
+			_isRecording = true;
+		}
+	}
+
 	public void playVideo()
     {
 		//vidScreen.Play ();
  		//vidCanvas.SetActive (false);
 	}
 
-
-	//Custom 4
 	public void stopVideo()
     {
 		//vidScreen.Stop ();
 		//vidCanvas.SetActive (true);
 	}
 
-
-	// Update is called once per frame
-	void Update ()
-    {
-		if (pressedButton == true)
-        {
-			pressedButton = false;
-			if (isRecording)
-            {
-				myResultBox.text = "Listening for command";
-				commandClip = Microphone.Start (null, false, 5, samplerate);  //Start recording (rewriting older recordings)
-			}
-
-			//Custom 5
-			if (!isRecording)
-            {
-				myResultBox.text = null;
-				myResultBox.text = "Saving Voice Request";
-
-				// Save the audio file
-				Microphone.End (null);
-
-				if (SavWav.Save ("sample", commandClip))
-                {
-					myResultBox.text = "Sending audio to AI...";
-				}
-                else
-                {
-					myResultBox.text = "FAILED";
-				}
-
-				// At this point, we can delete the existing audio clip
-				commandClip = null;
-
- 				//Start a coroutine called "WaitForRequest" with that WWW variable passed in as an argument
-				StartCoroutine(SendRequestToWitAi());
-
-			}
-		}
-
-	}
-
  	public IEnumerator SendRequestToWitAi()
     {
-		//Custom 6
         //To read the stored audio file and convert it to Byte format
 		string file = Application.persistentDataPath + "/sample.wav";
  		string API_KEY = token;
 
-		//To rar file to bytes.
+		//To convert wav file to bytes.
 		FileStream filestream = new FileStream (file, FileMode.Open, FileAccess.Read);
 		BinaryReader filereader = new BinaryReader (filestream);
 		byte[] postData = filereader.ReadBytes ((Int32)filestream.Length);
 		filestream.Close ();
 		filereader.Close ();
 
-		//Custom 7
+		//Headers are like labels so the AI will know what type of file is sent and knows how to read it.
 		Dictionary<string, string> headers = new Dictionary<string, string>();
 		headers["Content-Type"] = "audio/wav";
-		headers["Authorization"] = "Bearer " + API_KEY;
-        //Headers are like labels so the AI will know what type of file is sent and knows how to read it.
+		headers["Authorization"] = "Bearer " + API_KEY;        
 
         //Declaring a new variable time to make a request unique.
 		float timeSent = Time.time;
@@ -196,6 +192,4 @@ public partial class Wit3D : MonoBehaviour
         Handle (www.text); //Pass the Json code to a function called Handle.
 
 	}
-    
-
 }

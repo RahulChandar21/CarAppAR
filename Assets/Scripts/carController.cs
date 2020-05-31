@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class carController : MonoBehaviour
 {
-
+	AudioSource carSound;
 	Animator anim;
  	public static carController instance;
 
@@ -20,7 +20,7 @@ public class carController : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
- 
+		
 		//Loop through the child items activating the correct item by name
 		for (int i = 0; i < transform.childCount; ++i)
         {
@@ -47,7 +47,20 @@ public class carController : MonoBehaviour
 	//Called from _Handle
  	public void triggerAnimation(string action)
     {
+		anim = GameObject.Find("UserDefinedTarget-1/activeItems/" + GameController.currentSelectedCar).GetComponent<Animator>();
 		anim.SetTrigger (action);
+	}
+
+	public void engineStart()
+	{
+		carSound = GameObject.Find("UserDefinedTarget-1/activeItems/" + GameController.currentSelectedCar).GetComponent<AudioSource>();
+		carSound.Play();
+	}
+
+	public void engineStop()
+	{
+		carSound = GameObject.Find("UserDefinedTarget-1/activeItems/" + GameController.currentSelectedCar).GetComponent<AudioSource>();
+		carSound.Stop();
 	}
 
 	//Called from _Handle

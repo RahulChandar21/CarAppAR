@@ -34,13 +34,14 @@ public static class SavWav
 
 	const int HEADER_SIZE = 44;
 
+	//Constructor of type Bool, called in Wit3D script.
 	public static bool Save(string filename, AudioClip clip)
 	{
-		if (!filename.ToLower().EndsWith(".wav"))
+		if (filename.ToLower().EndsWith(".wav") == false)
 		{
 			filename += ".wav";
 		}
-		//CUSTOM 10
+
 		//"Application.persistentDataPath" - Inbuilt function within Unity, that stores the data in right location for mobile.
 		var filepath = Application.persistentDataPath + "/" + filename;
 		Debug.Log(filepath);
@@ -53,7 +54,9 @@ public static class SavWav
 			WriteHeader(fileStream, clip);
 		}
 
-		return true; // TODO: return false if there's a failure saving the file
+		return true;
+		
+		// TODO: return false if there's a failure saving the file
 	}
 
 	public static AudioClip TrimSilence(AudioClip clip, float min)
