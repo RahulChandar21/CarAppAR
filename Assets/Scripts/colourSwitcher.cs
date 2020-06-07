@@ -7,7 +7,7 @@ public class colourSwitcher : MonoBehaviour
 {
 	public static colourSwitcher instance;
 	public GameObject[] carParts;
-	private GameObject currentTracked;
+	public GameObject currentTracked;
 
 	void Awake()
 	{

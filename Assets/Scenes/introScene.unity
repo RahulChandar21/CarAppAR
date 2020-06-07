@@ -1670,8 +1670,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -30}
-  m_SizeDelta: {x: 800, y: 500}
+  m_AnchoredPosition: {x: 24.8, y: -17.4}
+  m_SizeDelta: {x: 1199.8762, y: 525.1631}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1632503621
 MonoBehaviour:
@@ -1694,21 +1694,39 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 50
+    m_FontSize: 30
     m_FontStyle: 1
     m_BestFit: 0
-    m_MinSize: 5
+    m_MinSize: 3
     m_MaxSize: 50
-    m_Alignment: 4
+    m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Choose a car...
+  m_Text: 'This application provides a digital experience of testing a car with Augmented
+    Reality technology.
 
-    With this application you can have a digital experience
-    of the car with Augmented Reality technology, powered by Unity!'
+
+    1. Choose a car of your liking in the introduction
+    screen.
+
+    2. You will then be taken to your mobile camera view.
+
+    3. You
+    need to focus the camera on a suitable surface to place the car.
+
+    4. Make
+    sure there is enough light and space to place the car.
+
+    5. Indicator on top
+    will let you know how suitable the surface is to place the car.
+
+    6. Finally
+    interact with the car with your voice, using the record button. You could Open/Close
+    the driver''s door, Start/Stop the engine and cange the color of the car (Red,
+    Green, Blue, Black and White).'
 --- !u!222 &1632503622
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2171,6 +2189,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2131317346028388811, guid: c7ad4a39587cd4a388cba51e939939a5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2131317348112107572, guid: c7ad4a39587cd4a388cba51e939939a5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2131613937293547921, guid: c7ad4a39587cd4a388cba51e939939a5,
         type: 3}
       propertyPath: m_Name

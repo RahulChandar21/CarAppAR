@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class carController : MonoBehaviour
 {
 	AudioSource carSound;
+	VideoPlayer videoControl;
 	Animator anim;
  	public static carController instance;
 
@@ -61,6 +63,18 @@ public class carController : MonoBehaviour
 	{
 		carSound = GameObject.Find("UserDefinedTarget-1/activeItems/" + GameController.currentSelectedCar).GetComponent<AudioSource>();
 		carSound.Stop();
+	}
+
+	public void playVideo()
+    {
+		videoControl = GameObject.Find("UserDefinedTarget-1/activeItems/" + GameController.currentSelectedCar + "/Cube").GetComponent<VideoPlayer>();
+		videoControl.Play();
+    }
+
+	public void stopVideo()
+	{
+		videoControl = GameObject.Find("UserDefinedTarget-1/activeItems/" + GameController.currentSelectedCar + "/Cube").GetComponent<VideoPlayer>();
+		videoControl.Stop();
 	}
 
 	//Called from _Handle

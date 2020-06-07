@@ -27,33 +27,60 @@ public partial class Wit3D : MonoBehaviour
             //PopulateObject - receives file (here jsonString), passed from Wit3D script. This is json code format.
             //It will then dynamically populate the object that is mentioned ("theAction") here. This is class of type RootObject.
 
-			if (theAction.entities.open != null)
+			if (theAction.entities.open != null && theAction._text.Contains("open"))
             {
 				foreach (Open aPart in theAction.entities.open)
                 {
-                    //For Debugging
-					Debug.Log (aPart.value);
-                    //myHandleTextBox.text = aPart.value;
+                    if (theAction._text.Contains("door"))
+                    {
+                        //For Debugging
+                        Debug.Log(aPart.value);
+                        //myHandleTextBox.text = aPart.value;
 
-                    carController.instance.triggerAnimation("openDriversDoor");
-					actionFound = true;
+                        carController.instance.triggerAnimation("openDriversDoor");
+                    }
+
+                    else if (theAction._text.Contains("trunk"))
+                    {
+                        carController.instance.triggerAnimation("openTrunk");
+                    }
+
+                    else if (theAction._text.Contains("bonnet"))
+                    {
+                        carController.instance.triggerAnimation("openBonnet");
+                    }
+
+                    actionFound = true;
 				}
 			}
 
-			if (theAction.entities.close != null)
+			else if (theAction.entities.close != null && theAction._text.Contains("close"))
             {
 				foreach (Close aPart in theAction.entities.close)
                 {
-                    //For Debugging
-                    Debug.Log (aPart.value);
-                    //myHandleTextBox.text = aPart.value;
+                    if (theAction._text.Contains("door"))
+                    {   //For Debugging
+                        Debug.Log(aPart.value);
+                        //myHandleTextBox.text = aPart.value;
 
-                    carController.instance.triggerAnimation("closeDriversDoor");
-					actionFound = true;
+                        carController.instance.triggerAnimation("closeDriversDoor");
+                    }
+
+                    else if (theAction._text.Contains("trunk"))
+                    {
+                        carController.instance.triggerAnimation("closeTrunk");
+                    }
+
+                    else if (theAction._text.Contains("bonnet"))
+                    {
+                        carController.instance.triggerAnimation("closeBonnet");
+                    }
+
+                    actionFound = true;
 				}
 			}
 
-            if (theAction.entities.color != null)
+            else if (theAction.entities.color != null)
             {
                 foreach (carColor aPart in theAction.entities.color)
                 {
@@ -62,32 +89,51 @@ public partial class Wit3D : MonoBehaviour
                     //myHandleTextBox.text = aPart.value;
 
                     colourSwitcher.instance.colours(aPart.value);
+
                     actionFound = true;
                 }
             }
 
-            if (theAction.entities.start != null)
+            else if (theAction.entities.start != null)
             {
                 foreach (Start aPart in theAction.entities.start)
                 {
-                    //For Debugging
-                    Debug.Log(aPart.value);
-                    //myHandleTextBox.text = aPart.value;
+                    if (theAction._text.Contains("engine"))
+                    {
+                        //For Debugging
+                        Debug.Log(aPart.value);
+                        //myHandleTextBox.text = aPart.value;
 
-                    carController.instance.engineStart();
+                        carController.instance.engineStart();
+                    }
+
+                    else if (theAction._text.Contains("video"))
+                    {
+                        carController.instance.playVideo();
+                    }
+
                     actionFound = true;
                 }
             }
 
-            if (theAction.entities.stop != null)
+            else if (theAction.entities.stop != null)
             {
                 foreach (Stop aPart in theAction.entities.stop)
                 {
-                    //For Debugging
-                    Debug.Log(aPart.value);
-                    //myHandleTextBox.text = aPart.value;
+                    if (theAction._text.Contains("engine"))
+                    {
+                        //For Debugging
+                        Debug.Log(aPart.value);
+                        //myHandleTextBox.text = aPart.value;
 
-                    carController.instance.engineStop();
+                        carController.instance.engineStop();
+                    }
+
+                    else if (theAction._text.Contains("video"))
+                    {
+                        carController.instance.stopVideo();
+                    }
+
                     actionFound = true;
                 }
             }

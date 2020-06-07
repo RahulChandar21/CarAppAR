@@ -29,6 +29,12 @@ public class carSelector : MonoBehaviour
         if (_carList[0]) //Executes if there is an object available in element 1, which is obvious.
         {
             _carList[0].SetActive(true); // The 1st element is assigned True, so only this appears by default.
+
+            //To ensure spin animation works while loading "myLamboConvert".
+            if (_carList[0].name == "myLamboConvert")
+            {
+                _carList[0].GetComponent<Animator>().SetTrigger("spin");
+            }
         }
     }
 
@@ -57,6 +63,11 @@ public class carSelector : MonoBehaviour
         }
 
         _carList[currentCar].SetActive(true); //Enable the next car applicable
+                                              //To ensure spin animation works while loading "myLamboConvert".
+        if (_carList[currentCar].name == "myLamboConvert")
+        {
+            _carList[currentCar].GetComponent<Animator>().SetTrigger("spin");
+        }
 
         GameController.currentSelectedCar = _carList[currentCar].name; //".name" used because _carList[currentCar] is GameObject type variable. This cannot be assigned to static string.
     }
